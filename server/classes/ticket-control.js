@@ -15,8 +15,8 @@ class TicketControl
     {
         this.ultimo = 0;
         this.hoy = new Date().getDate();  //Obtenenemos el días actual
-        this.tickets= []; //lleva el control de los tickets pendientes
-        this.ultimos4= []; //mantiene el ticket en servicio mas los ultimos 3, esto se mostrará en la pantalla
+        this.tickets = []; //lleva el control de los tickets pendientes
+        this.ultimos4 = []; //mantiene el ticket en servicio mas los ultimos 3, esto se mostrará en la pantalla
         let data = require('../data/data.json'); //El archivo donde guardaremos la infornmacionm del ticket y fechas, podria ser una base de datos pero en este ejemplo se usara un .json
         
         //Verifica que acuando se reinicie el servidor no sea un nuevo día, si es el mismo se recoge la info del archivo, de lo contrario todo se reinicia
@@ -35,7 +35,7 @@ class TicketControl
     reiniciarConteo(){  //Nota que no lleva function y no es función de flecha, esto es porque esta dentro de la clase
         this.ultimo = 0;
         this.tickets= []; //reiniciamos los ticket pendiente
-        this.ultimos4 =[]; 
+        this.ultimos4= []; 
         this.grabarArchivo();    
     }
     
@@ -51,6 +51,10 @@ class TicketControl
     {
         return this.ultimo;
     }
+    getUltimos4()
+    {
+        return this.ultimos4;
+    }
 /*Lógica para atender tickets en los escritorios*/
     atenderTicket(escritorio)
     {
@@ -62,15 +66,18 @@ class TicketControl
         let numTicket= this.tickets[0].numero; //Se extrae el número para romper el paso por referencia que maneja javascript
         this.tickets.shift(); //Elimina el primer elemento del arreglo
         let atenderTicket = new Ticket (numTicket,escritorio);
+        console.log(this.ultimos4);
+
         this.ultimos4.unshift(atenderTicket);  //Agrega un elemento al principio del arreglo.
         
-        if(this.ultimos4.lenght>4)
+        if(this.ultimos4.length>4)
         {
-            this.ultimos4.slice(-1,1); // Borra el ultimo elemento
+            console.log("desde la considción");
+            this.ultimos4= this.ultimos4.slice(0,4); // Borra el ultimo elemento
         }
-        console.log("ultimos4: ");
-        console.log(ultimos4);
         this.grabarArchivo();
+        console.log("ultimos4: ");
+        console.log(this.ultimos4);
         return atenderTicket;  //Aunque yo retornaría el arreglo
     }
 

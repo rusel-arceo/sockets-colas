@@ -13,20 +13,28 @@ io.on('connection', (client) => {
     });*/ //Funcionaba bien solo que a la inversa del curso, usaré la opcion del curson para adecuarme a lo que sigue
 
     client.emit('estadoActual', {
-        ultimoTicket: ticketControl.getUltimoTicket()
+        ultimos4: ticketControl.getUltimos4(),
+        actual: ticketControl.getUltimoTicket()
         });
-
-    client.on('atenderTicket',(data,callback)=>{
-        if(!data.escritorio) //SI no viene el escritorio mandar error
-        {
+        
+        client.on('atenderTicket',(data,callback)=>{
+           if(!data.escritorio) //SI no viene el escritorio mandar error
+            {
             return callback(
                 {
                     err:true,
                     mensaje:'El escritorio es necesario'
                 });
-
             }
+
+            
         let atenderTicket = ticketControl.atenderTicket(data.escritorio); //solicitamos atender el ticket
+            
+        client.broadcast.emit('estadoActual', {
+            ultimos4: ticketControl.getUltimos4(),
+            actual: ticketControl.getUltimoTicket()
+        });
+
         callback(atenderTicket); //Respondemos a la petición llamando el callback de respuesta mandando el ticket correcto
 
         //Se debe emitir o avisar de los cambios en los ultimos4 para que se reflejen  en la pantalla.

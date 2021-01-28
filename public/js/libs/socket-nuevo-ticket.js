@@ -10,7 +10,7 @@ socket.on('connect',function (){
 });*/  //Tambien pudo ser alreves, al conectarse, el sevidor podria mandar el estado actual y aquí se recibía con el on y se mostraba en la pantalla
 
 socket.on('estadoActual', function(resp){
-    label.innerHTML =`Ticket número ` + resp.ultimoTicket;
+    label.innerHTML =`Ticket número ` + resp.actual;
 });
 
 socket.on('disconnect',function (){
